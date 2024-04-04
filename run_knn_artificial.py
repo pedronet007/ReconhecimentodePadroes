@@ -1,4 +1,4 @@
-from knn import *
+from modelos.knn import *
 
 # Carregando os dados
 caminho = "./dados/artificial.data"
