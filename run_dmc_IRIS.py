@@ -1,4 +1,4 @@
-from dmc import *
+from modelos.dmc import *
 
 # Carregando os dados
 caminho = "./dados/iris.data"
