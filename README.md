@@ -10,7 +10,7 @@ O repositório está estruturado da seguinte forma:
 
     /dados: Contém os conjuntos de dados utilizados no trabalho.
     /modelos: Contém o código-fonte desenvolvido para a implementação das técnicas de reconhecimento de padrões.
-    /results: Contém os resultados obtidos durante a execução do trabalho, como métricas de desempenho, gráficos e visualizações.
+    /resultados: Contém os resultados obtidos durante a execução do trabalho, como métricas de desempenho, gráficos e visualizações.
 
 Instalação e Requisitos
 
