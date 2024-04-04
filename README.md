@@ -1,6 +1,4 @@
-Trabalho de Pós-Graduação em Reconhecimento de Padrões
-
-Este repositório contém o código e a documentação relacionados ao trabalho de pós-graduação em Reconhecimento de Padrões.
+Este repositório contém o código e a documentação relacionados ao trabalho em Reconhecimento de Padrões.
 Descrição do Trabalho
 
 O objetivo deste trabalho é explorar e aplicar técnicas de reconhecimento de padrões para resolver problemas específicos. O reconhecimento de padrões é uma área da inteligência artificial que envolve identificar padrões regulares e previsíveis em dados brutos. Esses padrões podem ser utilizados para classificação, detecção de anomalias, segmentação, entre outros.
