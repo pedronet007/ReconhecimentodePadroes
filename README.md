@@ -29,5 +29,5 @@ Contato
 
 Para mais informações sobre este trabalho, entre em contato com o autor:
 
-Nome: [Pedro Neto]
-Email: [pedro@it4yu.com]
+Nome: Pedro Neto
+Email: pedro@it4yu.com
