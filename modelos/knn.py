@@ -164,8 +164,10 @@ def run(X,y,colunas,classes):
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)
     conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
-    print(f"Matriz de confusão com o melhor K para a realização {random_realization}:\n{conf_matrix}")
-
+    print(f"Matriz de confusão com o melhor K = {k_optimal} para a realização {random_realization}:\n{conf_matrix}")
+    print("Dados utilizados para teste")
+    print(X_test)
+    print(y_test)
 	# Escolhendo um par de atributos aleatório para plotar a superfície de decisão
 	# print(X_train[:, :2].shape, X_train_subset.shape)
     #plt.figure(figsize=(10, 6))
