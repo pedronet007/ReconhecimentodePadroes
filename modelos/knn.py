@@ -1,51 +1,6 @@
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
+from modelos.funcoes import *
 
 #ALUNO PEDRO WILSON FELIX M NETO KNN IRIS DATASET
-
-# Definindo a função de distância Euclidiana
-def euclidean_distance(x1, x2):
-    return np.sqrt(np.sum((x1 - x2)**2))
-
-def predict(X_train, y_train, x_test, k):
-    distances = [euclidean_distance(x_test, x_train) for x_train in X_train]
-    k_indices = np.argsort(distances)[:k]
-    k_nearest_labels = [y_train[i] for i in k_indices]
-    most_common = max(set(k_nearest_labels), key=k_nearest_labels.count)
-    return most_common
-
-def knee_curve(X_train, y_train, k_range, X_val, y_val):
-    scores = []
-    df_final = pd.DataFrame() 
-    for k in k_range:
-        predictions = [predict(X_train, y_train, x_val, k) for x_val in X_val]
-        accuracy = np.mean(predictions == y_val)
-        dict_={k:accuracy}
-        df_temp = pd.DataFrame.from_dict(dict_, orient="index", columns=["ACCURACY"]).reset_index(names=["K"])
-        df_final = pd.concat([df_temp, df_final], ignore_index=True)
-        
-    return df_final
-	
-def knee_plot_curve (scores,k_range):
-    plt.figure(figsize=(10, 6))
-    plt.plot(k_range, scores, marker='o', linestyle='-')
-    plt.title('KNN Knee Curve')
-    plt.xlabel('Number of Neighbors (K)')
-    plt.ylabel('Accuracy')
-    plt.xticks(k_range)
-    plt.grid(True)
-    plt.show()
-     
-# Exemplo de uso
-# Suponha que você tenha seus dados de treinamento X_train e os rótulos correspondentes y_train
-# Suponha que você tenha seus dados de validação X_val e os rótulos correspondentes y_val
-# Defina a faixa de valores de K que você deseja testar
-# k_range = range(1, 21)  # Testando de 1 a 20 vizinhos
-# knee_curve(X_train, y_train, k_range, X_val, y_val)
-
 
 # Implementação do algoritmo KNN
 class KNN:
@@ -70,48 +25,6 @@ class KNN:
         # Retornar o rótulo mais comum
         most_common = np.argmax(np.bincount(k_nearest_labels))
         return most_common
-   
- # Função para dividir os dados em conjuntos de treinamento e teste usando holdout
-def train_test_split(X, y, test_size=0.2, random_state=None):
-    if random_state:
-        np.random.seed(random_state)
-    shuffled_indices = np.random.permutation(len(X))
-    test_set_size = int(len(X) * test_size)
-    test_indices = shuffled_indices[:test_set_size]
-    train_indices = shuffled_indices[test_set_size:]
-    return X[train_indices], X[test_indices], y[train_indices], y[test_indices]
-
-# Função para calcular a acurácia
-def accuracy_score(y_true, y_pred):
-    correct_predictions = np.sum(y_true == y_pred)
-    total_predictions = len(y_true)
-    return correct_predictions / total_predictions
-
-# Função para calcular a matriz de confusão
-def confusion_matrix(y_true, y_pred, num_classes):
-    matrix = np.zeros((num_classes, num_classes), dtype=int)
-    for true, pred in zip(y_true, y_pred):
-        matrix[true][pred] += 1
-    return matrix
-
-# Função para plotar a superfície de decisão
-def plot_decision_surface(X, y, classifier, resolution=0.02):
-    markers = ('s', 'x', 'o', '^', 'v')
-    colors = ('red', 'blue', 'lightgreen', 'gray', 'cyan')
-    cmap = ListedColormap(colors[:len(np.unique(y))])
-
-    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx1, xx2 = np.meshgrid(np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution))
-    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
-    Z = Z.reshape(xx1.shape)
-
-    plt.contourf(xx1, xx2, Z, alpha=0.4, cmap=cmap)
-    plt.xlim(xx1.min(), xx1.max())
-    plt.ylim(xx2.min(), xx2.max())
-
-    for idx, cl in enumerate(np.unique(y)):
-        plt.scatter(x=X[y == cl, 0], y=X[y == cl, 1], alpha=0.8, c=[cmap(idx)], marker=markers[idx], label=cl)
 
 # Realizando 20 interações
 def cross_validation (k,X,y):
@@ -182,9 +95,12 @@ def run(X,y,colunas,classes):
     X_train_subset = X_train[:, random_features]
     X_test_subset = X_test[:, random_features]
     knn.fit(X_train_subset, y_train)
-
+    agora = datetime.datetime.now()
+    print('entrei nas contas da superficie de decisao :',agora)
     plt.figure(figsize=(10, 6))
     plot_decision_surface(X_train_subset, y_train, knn)
+    agora = datetime.datetime.now()
+    print('sai das contas superficie de decisao :',agora)
     plt.xlabel(colunas[random_features[0]])
     plt.ylabel(colunas[random_features[1]])
     plt.title('Superfície de Decisão para os Atributos Selecionados')
