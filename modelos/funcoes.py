@@ -102,7 +102,7 @@ def plot_decision_surface_dmc(X, y, classifier, colunas, classes):
     plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', cmap=plt.cm.Paired)
     plt.xlabel(colunas[0])
     plt.ylabel(colunas[1])
-    plt.title("Superfície de Decisão")
+    plt.title("Superfície de Decisão DMC")
     plt.show()
 
 # Função para plotar a superfície de decisão
