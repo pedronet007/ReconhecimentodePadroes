@@ -1,12 +1,4 @@
-import numpy as np
-import pandas as pd
-import random
-import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-
-# Definindo a função de distância Euclidiana
-def euclidean_distance(x1, x2):
-    return np.sqrt(np.sum((x1 - x2)**2))
+from modelos.funcoes import *
 
 # Criacao do Classificador DMC
 class DMCClassifier:
@@ -29,25 +21,13 @@ class DMCClassifier:
             predictions.append(predicted_class)
         return predictions
 
-def run(X,y,colunas,classes):
-    # Função para dividir os dados em conjuntos de treinamento e teste usando holdout
-    def train_test_split(X, y, test_size=0.2):
-        data = list(zip(X, y))
-        random.shuffle(data)
-        test_set_size = int(len(data) * test_size)
-        X_train = [d[0] for d in data[test_set_size:]]
-        y_train = [d[1] for d in data[test_set_size:]]
-        X_test = [d[0] for d in data[:test_set_size]]
-        y_test = [d[1] for d in data[:test_set_size]]
-        return np.array(X_train), np.array(X_test), np.array(y_train), np.array(y_test)
-
-    # Realizações usando holdout
+# Realizando 20 interações
+def cross_validation (X,y):
     n_realizations = 20
     accuracies = []
-
     for i in range(n_realizations):
         # Divide os dados em conjunto de treinamento e teste manualmente (80% treinamento, 20% teste)
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+        X_train, X_test, y_train, y_test = train_test_split_dmc(X, y, test_size=0.2)
 
         # Instancia o classificador DMC
         dmc_classifier = DMCClassifier()
@@ -63,27 +43,53 @@ def run(X,y,colunas,classes):
         accuracies.append(accuracy)
         
         #Exibe os dados de teste
-        print(f"Dados de Teste na Realização {i+1}:")
-        for j, (attributes, label) in enumerate(zip(X_test, y_test)):
-            print(f"Amostra {j+1}: Atributos={attributes}, Rótulo={label}")
-
-
-    # Calcular a matriz de confusão
-    def confusion_matrix(y_true, y_pred):
-        classes = np.unique(y_true)
-        num_classes = len(classes)
-        conf_matrix = np.zeros((num_classes, num_classes), dtype=int)
-        for i in range(num_classes):
-            for j in range(num_classes):
-                conf_matrix[i, j] = np.sum((y_true == classes[i]) & (y_pred == classes[j]))
-        return conf_matrix
-
-    conf_matrix = confusion_matrix(y_test, y_pred)
-    print(f"Matriz de confusão :\n{conf_matrix}")
-
-    # Calcula a acurácia média e o desvio padrão
+        #print(f"Dados de Teste na Realização {i+1}:")
+        #for j, (attributes, label) in enumerate(zip(X_test, y_test)):
+        #    print(f"Amostra {j+1}: Atributos={attributes}, Rótulo={label}")
     mean_accuracy = np.mean(accuracies)
+    #Desvio padrao
     std_accuracy = np.std(accuracies)
+    print(f"Acurácia média: {mean_accuracy}")
+    print(f"Desvio padrão da acurácia: {std_accuracy}")
 
-    print("\nAcurácia Média:", mean_accuracy)
-    print("Desvio Padrão da Acurácia:", std_accuracy)   
+def run(X,y,colunas,classes):
+    random_realization = 4 #Numero 42 é mágico mais utilizado. rsrs
+    X_train, X_test, y_train, y_test = train_test_split_dmc(X, y, test_size=0.2)
+    dmc = DMCClassifier()
+    # Treina o classificador
+    dmc.fit(X_train, y_train)
+    # Faz previsões
+    y_pred = dmc.predict(X_test)
+    conf_matrix = confusion_matrix_dmc(y_test, y_pred)
+    print(f"Matriz de confusão :\n{conf_matrix}")
+    print(X_test)
+    print(y_test)
+    # Escolhendo um par de atributos aleatório para plotar a superfície de decisão
+    random_features = np.random.choice(range(X.shape[1]), size=2, replace=False)
+    X_train_subset = X_train[:, random_features]
+    X_test_subset = X_test[:, random_features]
+    dmc.fit(X_train_subset, y_train)
+    agora = datetime.datetime.now()
+    print('entrei nas contas da superficie de decisao :',agora)
+    #plot_decision_surface(X_train_subset, y_train, dmc)
+    # Dentro da função `run`, após o cálculo da média e desvio padrão da acurácia, adicione:
+    plot_decision_surface_dmc(X_train_subset, y_train, dmc, colunas, classes)
+    agora = datetime.datetime.now()
+    print('sai das contas superficie de decisao :',agora)
+    
+
+	## plot da matriz de confusão com o seaborn
+    plt.figure(figsize=(10,6))
+    fx=sns.heatmap(conf_matrix, annot=True, fmt=".2f",cmap="GnBu")
+    fx.set_title('Confusion Matrix DMC \n');
+    fx.set_xlabel('\n Predicted Values\n')
+    fx.set_ylabel('Actual Values\n');
+    fx.xaxis.set_ticklabels(classes)
+    fx.yaxis.set_ticklabels(classes)
+    plt.show()
+    #Chamada das 20 realizações crosvalidando e verificando a acuracia 
+    cross_validation(X,y)
+    
+    
+
+   
