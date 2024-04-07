@@ -65,6 +65,10 @@ def run(X,y,colunas,classes):
     #Alteracao que fixava axis do X_train em duas colunas
     #X_train = X_train[:, :2]
     #X_test = X_test[:, :2]
+    print("Dados de Treinamento:")
+    dados_com_labels = np.column_stack((X_train,y_train.astype(int)))
+    print (dados_com_labels)
+    
 	# Chame a função knee_curve para plotar a curva do joelho para encontrar o melhor valor de K
     df_scores = knee_curve(X_train, y_train, k_range, X_test, y_test)
     #Escolha do melhor K a partir da ordenação da maior acuracia pegando seu maior valor do dicionario criado com a lista de K e acuracias a partir da curva do joelho
@@ -78,9 +82,10 @@ def run(X,y,colunas,classes):
     y_pred = knn.predict(X_test)
     conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
     print(f"Matriz de confusão com o melhor K = {k_optimal} para a realização {random_realization}:\n{conf_matrix}")
-    print("Dados utilizados para teste")
-    print(X_test)
-    print(y_test)
+    print("Dados de teste:")
+    dados_com_labels_teste = np.column_stack((X_test, y_test.astype(int)))
+    print (dados_com_labels_teste)
+    
 	# Escolhendo um par de atributos aleatório para plotar a superfície de decisão
 	# print(X_train[:, :2].shape, X_train_subset.shape)
     #plt.figure(figsize=(10, 6))
