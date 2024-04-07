@@ -58,10 +58,14 @@ def run(X,y,colunas,classes):
     dmc = DMCClassifier()
     # Treina o classificador
     dmc.fit(X_train, y_train)
+    print("Dados de Treinamento:")
+    print (X_train)
+    print (y_train)
     # Faz previsões
     y_pred = dmc.predict(X_test)
     conf_matrix = confusion_matrix_dmc(y_test, y_pred)
     print(f"Matriz de confusão :\n{conf_matrix}")
+    print("Dados de teste:")
     print(X_test)
     print(y_test)
     # Escolhendo um par de atributos aleatório para plotar a superfície de decisão
