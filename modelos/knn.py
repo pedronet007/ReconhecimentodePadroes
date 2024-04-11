@@ -27,7 +27,7 @@ class KNN:
         return most_common
 
 # Realizando 20 interações
-def cross_validation (k,X,y):
+def cross_validation (K,X,y):
     n_realizations = 20
     accuracies = []
     for i in range(n_realizations):
@@ -37,8 +37,10 @@ def cross_validation (k,X,y):
         # scaler = StandardScaler()
         # X_train = scaler.fit_transform(X_train)
         # X_test = scaler.transform(X_test)
+        #Print K
+        print(f"o K utilizado para o cross_validarion foi : {K}")
         # Treinando o modelo KNN
-        knn = KNN(k=k)
+        knn = KNN(k=K)
         knn.fit(X_train, y_train)
 
         # Fazendo previsões
@@ -47,8 +49,8 @@ def cross_validation (k,X,y):
         # Calculando a acurácia
         accuracy = accuracy_score(y_test, y_pred)
         accuracies.append(accuracy)
-        #conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
-        #print(f"Matriz de confusão para a realização {i}:\n{conf_matrix}")
+        conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
+        print(f"Acurácia desta realização {accuracy}, Matriz de confusão para a realização {i}:\n{conf_matrix}")
     # Calculando média e desvio padrão da acurácia
     mean_accuracy = np.mean(accuracies)
     #Desvio padrao
@@ -81,7 +83,7 @@ def run(X,y,colunas,classes):
     knn.fit(X_train, y_train)
     y_pred = knn.predict(X_test)
     conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
-    print(f"Matriz de confusão com o melhor K = {k_optimal} para a realização {random_realization}:\n{conf_matrix}")
+    print(f"Matriz de confusão com o melhor K = {k_optimal} para o random_state= {random_realization}:\n{conf_matrix}")
     print("Dados de teste:")
     dados_com_labels_teste = np.column_stack((X_test, y_test.astype(int)))
     print (dados_com_labels_teste)
