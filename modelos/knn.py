@@ -1,6 +1,6 @@
 from modelos.funcoes import *
 
-#ALUNO PEDRO WILSON FELIX M NETO KNN IRIS DATASET
+#ALUNO PEDRO WILSON FELIX M NETO KNN - 2024.1
 
 # Implementação do algoritmo KNN
 class KNN:
@@ -37,8 +37,7 @@ def cross_validation (K,X,y):
         # scaler = StandardScaler()
         # X_train = scaler.fit_transform(X_train)
         # X_test = scaler.transform(X_test)
-        #Print K
-        print(f"o K utilizado para o cross_validarion foi : {K}")
+        #print(f"K utilizado para essa realização do cross_validarion foi : {K}")
         # Treinando o modelo KNN
         knn = KNN(k=K)
         knn.fit(X_train, y_train)
@@ -50,7 +49,7 @@ def cross_validation (K,X,y):
         accuracy = accuracy_score(y_test, y_pred)
         accuracies.append(accuracy)
         conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
-        print(f"Acurácia desta realização {accuracy}, Matriz de confusão para a realização {i}:\n{conf_matrix}")
+        print(f"Acurácia desta realização :{accuracy}, Matriz de confusão para a realização {i}:\n{conf_matrix}")
     # Calculando média e desvio padrão da acurácia
     mean_accuracy = np.mean(accuracies)
     #Desvio padrao
@@ -67,11 +66,11 @@ def run(X,y,colunas,classes):
     #Alteracao que fixava axis do X_train em duas colunas
     #X_train = X_train[:, :2]
     #X_test = X_test[:, :2]
+     #Chamada das 20 realizações crosvalidando e verificando a acuracia 
     print("Dados de Treinamento:")
     dados_com_labels = np.column_stack((X_train,y_train.astype(int)))
     print (dados_com_labels)
-    
-	# Chame a função knee_curve para plotar a curva do joelho para encontrar o melhor valor de K
+    # Chame a função knee_curve para plotar a curva do joelho para encontrar o melhor valor de K
     df_scores = knee_curve(X_train, y_train, k_range, X_test, y_test)
     #Escolha do melhor K a partir da ordenação da maior acuracia pegando seu maior valor do dicionario criado com a lista de K e acuracias a partir da curva do joelho
     scores = df_scores["ACCURACY"].tolist()
@@ -102,12 +101,13 @@ def run(X,y,colunas,classes):
     X_train_subset = X_train[:, random_features]
     X_test_subset = X_test[:, random_features]
     knn.fit(X_train_subset, y_train)
+    cross_validation(k_optimal, X,y)
     agora = datetime.datetime.now()
-    print('entrei nas contas da superficie de decisao :',agora)
+    print('Entrei nas contas da superficie de decisao :',agora)
     plt.figure(figsize=(10, 6))
     plot_decision_surface(X_train_subset, y_train, knn)
     agora = datetime.datetime.now()
-    print('sai das contas superficie de decisao :',agora)
+    print('Sai das contas superficie de decisao :',agora)
     plt.xlabel(colunas[random_features[0]])
     plt.ylabel(colunas[random_features[1]])
     plt.title('Superfície de Decisão para os Atributos Selecionados')
@@ -123,6 +123,3 @@ def run(X,y,colunas,classes):
     fx.xaxis.set_ticklabels(classes)
     fx.yaxis.set_ticklabels(classes)
     plt.show()
-
-    #Chamada das 20 realizações crosvalidando e verificando a acuracia 
-    cross_validation(k_optimal, X,y)
