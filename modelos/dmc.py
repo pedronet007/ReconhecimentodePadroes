@@ -1,5 +1,5 @@
 from modelos.funcoes import *
-
+#ALUNO PEDRO WILSON FELIX M NETO KNN - 2024.1
 # Criacao do Classificador DMC
 class DMCClassifier:
     def __init__(self):
@@ -51,6 +51,10 @@ def cross_validation (X,y):
     std_accuracy = np.std(accuracies)
     print(f"Acurácia média: {mean_accuracy}")
     print(f"Desvio padrão da acurácia: {std_accuracy}")
+    # Encontrar a realização com a melhor acurácia
+    best_accuracy_index = np.argmax(accuracies)
+    best_accuracy = accuracies[best_accuracy_index]
+    print("Melhor acurácia acontece na (Realização {}): {:.2f}".format(best_accuracy_index + 1, best_accuracy))
 
 def run(X,y,colunas,classes):
     random_realization = 4 #Numero 42 é mágico mais utilizado. rsrs

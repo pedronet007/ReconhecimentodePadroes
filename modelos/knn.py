@@ -56,6 +56,10 @@ def cross_validation (K,X,y):
     std_accuracy = np.std(accuracies)
     print(f"Acurácia média: {mean_accuracy}")
     print(f"Desvio padrão da acurácia: {std_accuracy}")
+    # Encontrar a realização com a melhor acurácia
+    # best_accuracy_index = np.argmax(accuracies)
+    # best_accuracy = accuracies[best_accuracy_index]
+    # print("Melhor acurácia , acontece na (Realização {}): {:.2f}".format(best_accuracy_index + 1, best_accuracy))
 
 #Chamando o KNN e passando os atributos com seus rótulos
 def run(X,y,colunas,classes):
