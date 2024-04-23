@@ -131,6 +131,23 @@ def run(X,y,colunas,classes):
     best_accuracy = accuracies[best_accuracy_index]
     print("Melhor acurácia ao utilizar randon_state {}, acontece na (Realização {}): {:.2f}".format(random_realization,best_accuracy_index + 1, best_accuracy))
 
+    #Passo 5
+    # Escolher a realizacao que possui a melhor acuracia para apresentar a matriz de confusão
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=best_accuracy_index+1)
+    nb_classifier = NaiveBayesClassifier()
+    nb_classifier.fit(X_train, y_train)
+    predictions = nb_classifier.predict(X_test)
+    conf_matrix = confusion_matrix(y_test, predictions, num_classes=len(np.unique(y)))
+    print("Matriz de Confusão da realizacao {}: ".format(best_accuracy_index+1))
+    print(conf_matrix)
+    plt.figure(figsize=(10,6))
+    fx=sns.heatmap(conf_matrix, annot=True, fmt=".2f",cmap="GnBu")
+    fx.set_title('Confusion Matrix \n');
+    fx.set_xlabel('\n Predicted Values\n')
+    fx.set_ylabel('Actual Values\n');
+    fx.xaxis.set_ticklabels(classes)
+    fx.yaxis.set_ticklabels(classes)
+    plt.show()
 
     # Escolher um par de atributos para a superfície de decisão sepal-width e sepal-length
     attribute1_index = 0
@@ -144,19 +161,6 @@ def run(X,y,colunas,classes):
     print("Dados de teste:")
     dados_com_labels_teste = np.column_stack((X_test, y_test.astype(int)))
     print (dados_com_labels_teste)
-
-    # Fazendo previsões
-    y_pred = nb_classifier.predict(X_test)
-
-    # Calculando a matriz de confusão
-    conf_matrix = confusion_matrix(y_test, y_pred, num_classes=len(np.unique(y)))
-    # Exibindo a matriz de confusão
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(conf_matrix, annot=True, cmap="Blues", fmt="d", xticklabels=classes, yticklabels=classes)
-    plt.xlabel('Predicted labels')
-    plt.ylabel('True labels')
-    plt.title('Confusion Matrix')
-    plt.show()
 
     # Plotando a superfície de decisão
     plot_decision_surface_cnb(X_train, y_train, nb_classifier, classes, attribute1_index, attribute2_index, colunas)

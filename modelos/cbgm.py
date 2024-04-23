@@ -1,7 +1,8 @@
 from modelos.funcoes import *
-
 import matplotlib.pyplot as plt
 import seaborn as sns
+#ALUNO PEDRO WILSON FELIX M NETO KNN - 2024.1
+# Criacao do Classificador CNB
 
 # Função para plotar a superfície de decisão
 def plot_decision_surface_cbgm(classifier, X, y,colunas, classes, attribute1_index, attribute2_index):
